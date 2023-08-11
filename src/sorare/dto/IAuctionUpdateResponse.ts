@@ -24,6 +24,11 @@ export interface ITokenAuction {
   bestBid: ITokenBid;
   currentPrice: string;
   nfts: IToken[];
+  bids: INode;
+}
+
+export interface INode {
+  nodes: ITokenBid[];
 }
 
 export interface IAuctionUpdateResponse {

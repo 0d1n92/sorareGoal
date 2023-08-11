@@ -1,5 +1,6 @@
 import { ActionCable } from '@sorare/actioncable';
 import { IAuctionUpdateResponse } from './dto/IAuctionUpdateResponse';
+import Logger from '../utils/logger';
 
 export default class WsSorare {
   private cable: ActionCable;
@@ -30,23 +31,32 @@ export default class WsSorare {
     const self = this;
     this.cable.subscribe(query, {
       connected() {
-        console.log('connesso');
+        Logger.info('connetto alla ws di sorare');
       },
 
       disconnected() {
-        console.log('disconnesso');
-        setTimeout(() => {
-          this.connected; // Riconnetti il bot al canale Action Cable.
-        }, 5000);
+        Logger.info('disconnesso dalla ws sorare');
+        try {
+          setTimeout(() => {
+            Logger.info('tentativo di riconnesione alla ws di sorare');
+            self.Start(query, action); // Riconnetti il bot al canale Action Cable.
+          }, 5000);
+        } catch (error: any) {
+          Logger.error(error.message);
+        }
       },
 
       rejected() {
-        console.log('rifiutato');
+        Logger.error('rifiutata conessione ws sorare');
       },
 
       received(data) {
-        self.result = data.result;
-        action(self.result);
+        try {
+          self.result = data.result;
+          action(self.result);
+        } catch (error: any) {
+          Logger.error(error.message);
+        }
       },
     });
   };

@@ -16,6 +16,7 @@ import {
   IAuctionUpdateResponse,
   ITokenAuction,
 } from './sorare/dto/IAuctionUpdateResponse';
+import Logger from './utils/logger';
 
 export default class Bot {
   private static instance: Bot | null = null;
@@ -45,7 +46,7 @@ export default class Bot {
 
   private async onInit() {
     this.client.on('ready', async () => {
-      console.log(`Logged in as ${this.client.user!.tag}`);
+      Logger.info(`Logged in as ${this.client.user!.tag}`);
       this.client.on('messageCreate', (msg: Message) =>
         this.handleMessage(msg)
       );
@@ -94,24 +95,49 @@ export default class Bot {
         {
           name: 'Average Price Eth',
           value: String(new WeiConverter(String(mediumPrice)).call()),
+        },
+        {
+          name: 'Best Offer Euro',
+          value: String(card.bestBid.amountInFiat.eur),
         }
       );
 
-    const channel = this.client.channels.cache.get(
-      String(process.env.CHANNEL_ID)
-    );
+    const channelIds = JSON.parse(String(process.env.CHANNEL_IDS));
+    const channel = this.client.channels.cache.get(String(channelIds['all']));
+    let channel2;
+    const amountInFiat = Number(card.bids.nodes[0].amountInFiat);
+
+    if (amountInFiat > 100) {
+      const channelId = String(channelIds['100to250']);
+      channel2 = this.client.channels.cache.get(channelId);
+    } else if (amountInFiat > 50) {
+      const channelId = String(channelIds['50to100']);
+      channel2 = this.client.channels.cache.get(channelId);
+    } else if (amountInFiat > 25) {
+      const channelId = String(channelIds['25to50']);
+      channel2 = this.client.channels.cache.get(channelId);
+    } else if (amountInFiat > 10) {
+      const channelId = String(channelIds['10to25']);
+      channel2 = this.client.channels.cache.get(channelId);
+    } else {
+      const channelId = String(channelIds['1to10']);
+      channel2 = this.client.channels.cache.get(channelId);
+    }
 
     if (
       channel &&
-      (channel instanceof TextChannel || channel instanceof DMChannel)
+      (channel instanceof TextChannel || channel instanceof DMChannel) &&
+      channel2 &&
+      (channel2 instanceof TextChannel || channel2 instanceof DMChannel)
     ) {
       try {
         await channel.send({ embeds: [embed] });
+        await channel2.send({ embeds: [embed] });
       } catch (error) {
-        console.error('Errore nell invio del messaggio:', error);
+        Logger.error('Errore nell invio del messaggio:' + error);
       }
     } else {
-      console.error(
+      Logger.error(
         `Il canale con ID ${process.env.CHANNEL_ID} non è un TextChannel o un DMChannel o non esiste.`
       );
     }

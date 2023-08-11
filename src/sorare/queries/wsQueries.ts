@@ -1,12 +1,27 @@
 export const AUCTION_UPDATE: string = `
-    tokenAuctionWasUpdated(sports:FOOTBALL){
-    currentPrice
-    bestBid {
+tokenAuctionWasUpdated(sports:FOOTBALL){
+  currentPrice
+  bestBid {
+    amountInFiat {
+      eur
+    }
+    amount
+  }
+   bids(first:5) {
+    nodes {
       amount
+      maximumAmounts {
+        eur
+      }
+      maximumAmount
+
+
       amountInFiat {
         eur
       }
     }
+
+  }
     nfts {
       name
       slug
@@ -20,6 +35,6 @@ export const AUCTION_UPDATE: string = `
 
       }
     }
-
+   open
   }
     `;

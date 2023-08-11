@@ -36,12 +36,6 @@ module.exports = {
     // Non consentire variabili non utilizzate
     'no-unused-vars': 'error',
 
-    // Impedire l'uso di console.log in produzione
-    'no-console':
-      process.env.MODE === 'PROD'
-        ? ['error', { allow: ['warn', 'error', 'info'] }]
-        : 'warn',
-
     // Impedire l'uso di var e promuovere l'uso di const o let
     'no-var': 'error',
     'prefer-const': 'error',

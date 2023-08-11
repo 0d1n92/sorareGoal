@@ -1,6 +1,7 @@
 import axios from 'axios';
 import bcrypt from 'bcrypt';
 import 'dotenv/config';
+import Logger from './logger';
 
 export default class Helper {
   public static hashPassword = async (
@@ -12,7 +13,9 @@ export default class Helper {
       return hashedPassword;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      throw new Error('Errore durante lhash della password: ' + error.message);
+      const message = 'Errore durante lhash della password: ' + error.message;
+      Logger.error(message);
+      throw new Error(message);
     }
   };
 
@@ -23,7 +26,7 @@ export default class Helper {
         return res.data.salt;
       })
       .catch((err: Error) => {
-        console.log(err);
+        Logger.error(err.message);
         return false;
       });
   };

@@ -2,6 +2,7 @@ import { GraphQLClient } from 'graphql-request';
 import 'dotenv/config';
 import Helper from '../utils/helper';
 import { ISignInResponse } from './dto/ISignInResponse';
+import * as QUERY from './queries/mutation';
 
 export default class SorareApi {
   private static instance: SorareApi | null = null;
@@ -23,23 +24,6 @@ export default class SorareApi {
       }
     );
 
-    const mutation = `
-     mutation SignInMutation($input: signInInput!) {
-      signIn(input: $input) {
-        currentUser {
-          slug
-          jwtToken(aud: "poc-sorare") {
-            token
-            expiredAt
-          }
-        }
-        errors {
-          message
-        }
-      }
-    }
-  `;
-
     let hashPassword: string = '';
 
     const salt = await Helper.getSalt();
@@ -60,7 +44,7 @@ export default class SorareApi {
 
     try {
       const data = await graphQLClient.request<ISignInResponse>(
-        mutation,
+        QUERY.SIGIN,
         variables
       );
       if (data && data.signIn && data.signIn.currentUser) {
