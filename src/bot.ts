@@ -98,14 +98,14 @@ export default class Bot {
         },
         {
           name: 'Best Offer Euro',
-          value: String(card.bestBid.amountInFiat.eur),
+          value: String(Number(card.bestBid.amountInFiat.eur).toFixed(2)),
         }
       );
 
     const channelIds = JSON.parse(String(process.env.CHANNEL_IDS));
     const channel = this.client.channels.cache.get(String(channelIds['all']));
     let channel2;
-    const amountInFiat = Number(card.bids.nodes[0].amountInFiat);
+    const amountInFiat = Number(card.bids.nodes[0].amountInFiat.eur);
 
     if (amountInFiat > 100) {
       const channelId = String(channelIds['100to250']);
