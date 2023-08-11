@@ -107,20 +107,20 @@ export default class Bot {
     let channel2;
     const amountInFiat = Number(card.bids.nodes[0].amountInFiat.eur);
 
-    if (amountInFiat > 100) {
-      const channelId = String(channelIds['100to250']);
+    if (amountInFiat > 1 && amountInFiat < 10) {
+      const channelId = String(channelIds['1to10']);
       channel2 = this.client.channels.cache.get(channelId);
-    } else if (amountInFiat > 50) {
-      const channelId = String(channelIds['50to100']);
-      channel2 = this.client.channels.cache.get(channelId);
-    } else if (amountInFiat > 25) {
-      const channelId = String(channelIds['25to50']);
-      channel2 = this.client.channels.cache.get(channelId);
-    } else if (amountInFiat > 10) {
+    } else if (amountInFiat > 10 && amountInFiat < 25) {
       const channelId = String(channelIds['10to25']);
       channel2 = this.client.channels.cache.get(channelId);
+    }  else if (amountInFiat > 25 && amountInFiat < 50) {
+      const channelId = String(channelIds['25to50']);
+      channel2 = this.client.channels.cache.get(channelId);
+    } else if (amountInFiat > 50 && amountInFiat < 100) {
+      const channelId = String(channelIds['50to100']);
+      channel2 = this.client.channels.cache.get(channelId);
     } else {
-      const channelId = String(channelIds['1to10']);
+      const channelId = String(channelIds['100to250']);
       channel2 = this.client.channels.cache.get(channelId);
     }
 
