@@ -39,7 +39,8 @@ export default class WsSorare {
         try {
           setTimeout(() => {
             Logger.info('tentativo di riconnesione alla ws di sorare');
-            self.Start(query, action); // Riconnetti il bot al canale Action Cable.
+            const newWS = new WsSorare();
+            newWS.Start(query, action); // Riconnetti il bot al canale Action Cable.
           }, 5000);
         } catch (error: any) {
           Logger.error(error.message);
