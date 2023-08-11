@@ -113,7 +113,7 @@ export default class Bot {
     } else if (amountInFiat > 10 && amountInFiat < 25) {
       const channelId = String(channelIds['10to25']);
       channel2 = this.client.channels.cache.get(channelId);
-    }  else if (amountInFiat > 25 && amountInFiat < 50) {
+    } else if (amountInFiat > 25 && amountInFiat < 50) {
       const channelId = String(channelIds['25to50']);
       channel2 = this.client.channels.cache.get(channelId);
     } else if (amountInFiat > 50 && amountInFiat < 100) {
