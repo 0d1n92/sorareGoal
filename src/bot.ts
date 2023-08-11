@@ -107,7 +107,7 @@ export default class Bot {
     let channel2;
     const amountInFiat = Number(card.bids.nodes[0].amountInFiat.eur);
 
-    if (amountInFiat > 1 && amountInFiat < 10) {
+    if (amountInFiat > 0 && amountInFiat < 10) {
       const channelId = String(channelIds['1to10']);
       channel2 = this.client.channels.cache.get(channelId);
     } else if (amountInFiat > 10 && amountInFiat < 25) {
